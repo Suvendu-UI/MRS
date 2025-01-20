@@ -9,7 +9,7 @@ const app = e();
 
 const reserveRouter = e.Router();
 
-reserveRouter.use('/manage',authenticationMiddleware,async function(req, res, next){
+reserveRouter.get('/',async function(req, res, next){
     const obj = req.body;
 
     const username = obj.username;
@@ -49,12 +49,12 @@ reserveRouter.use('/manage',authenticationMiddleware,async function(req, res, ne
     }
 
     if(foundMovie.av === true){
-        const foundRs = foundMovie.seats.find(foundUser._id)
-        if(!foundRs){
-            foundMovie.seats.push(foundUser._id)
-            res.json({
-                msg: " Seat is booked"
-            })
-        }
+        console.log(foundMovie.seats);
+        return res.json({
+            msg: "seats array showing now"
+        })
     }
 })
+
+
+export default reserveRouter;

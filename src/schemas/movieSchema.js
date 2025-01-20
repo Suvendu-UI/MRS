@@ -14,34 +14,42 @@ const MovieSchema = new Schema({
         type: String,
         require: true,
     },
-    startTime: {
-        type: String,
-        require: true,
+    timing: {
+        type: [ [ [Number],[Number],[Number],[Number],[Number] ] ]
     },
-    endTime: {
-        type: String,
-        require: true,
-    },
-    av: {
-        type: Boolean,
-        require: true,
-        default: false,
-    },
-    day: {
-        type: String,
-        require: true,
-    },
-    month: {
-        type: String,
-        require: true,
-    },
-    year: {
-        type: String,
-        require: true,
-    },
-    seats: {
-        type: Schema,
-    },
+    // startTime: {
+    //     type: String,
+    //     require: true,
+    // },
+    // endTime: {
+    //     type: String,
+    //     require: true,
+    // },
+    // av: {
+    //     type: Boolean,
+    //     require: true,
+    //     default: false,
+    // },
+    // day: {
+    //     type: String,
+    //     require: true,
+    // },
+    // month: {
+    //     type: String,
+    //     require: true,
+    // },
+    // year: {
+    //     type: String,
+    //     require: true,
+    // },
+    // seats: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'seat',
+    // },
+    // numOfSeats: {
+    //     type: Number,
+    //     require: true,
+    // }
 })
 
 const movie = mongoose.model('movie', MovieSchema);

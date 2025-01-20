@@ -4,6 +4,7 @@ import z from 'zod';
 
 import searchRouter from "./search.js";
 import addMovieRouter from "./addMovie.js";
+import reserveRouter from "./reserve.js";
 
 const app = e();
 const loginRouter = e.Router();
@@ -59,5 +60,6 @@ loginRouter.use('/search', searchRouter)
 
 loginRouter.use('/addMovie', addMovieRouter);
 loginRouter.use('/searchMovie', searchRouter);
+loginRouter.use('/reserve', reserveRouter);
 
 export default loginRouter;

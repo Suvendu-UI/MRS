@@ -1,7 +1,6 @@
 import express from "express";
 import z from "zod";
 import movie from "./schemas/movieSchema.js";
-import 
 
 
 const app = express();
@@ -20,11 +19,11 @@ addMovieRouter.post('/', async function(req, res, next){
     const av = req.body.av;
 
     const cortitle = z.string().safeParse(title);
-    const corstartTime = z.string().safeParse(startTime);
-    const corendTime = z.string().safeParse(endTime);
-    const corday = z.string().safeParse(day);
-    const cormonth = z.string().safeParse(month);
-    const coryear = z.string().safeParse(year);
+    const corstartTime = z.number().safeParse(startTime);
+    const corendTime = z.number().safeParse(endTime);
+    const corday = z.number().safeParse(day);
+    const cormonth = z.number().safeParse(month);
+    const coryear = z.number().safeParse(year);
     const corgenre = z.string().safeParse(genre);
     const cordescription = z.string().safeParse(description);
     const corav = z.string().safeParse(av);
@@ -35,32 +34,37 @@ addMovieRouter.post('/', async function(req, res, next){
         })
     }
 
-    const found = await movie.findOne({
+    const found = await movie.find({
         title,
-        startTime,
-        endTime,
-        day,
-        month,
-        year
+        
     })
 
     if(!found){
-        const created  = await movie.create({
-            title,
-            description,
-            genre,
-            startTime,
-            endTime,
-            av,
-            day,
-            month,
-            year,
-        })
+        const date = new Date();
+        if((startTime >= 0 && startTime <= 2400) && (endTime >= 0 && endTime <= 2400) && (endTime >= startTime)){
+            if(year >= date.getFullYear()){
+                if(month >= date.getMonth() + 1){
+                    if(day >= date.getDate()){
+                        const created  = await movie.create({
+                            title,
+                            description,
+                            genre,
+                            startTime,
+                            endTime,
+                            av,
+                            day,
+                            month,
+                            year,
+                        })
 
-        if(created) {
-            return res.json({
-                msg: "Movie created successfully"
-            })
+                        if(created) {
+                            return res.json({
+                                msg: "Movie created successfully"
+                            })
+                        }
+                    }
+                }
+            }    
         }
     }
 
