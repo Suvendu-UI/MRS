@@ -36,7 +36,7 @@ addMovieRouter.post('/', async function(req, res, next){
 
     const found = await movie.find({
         title,
-        
+        $
     })
 
     if(!found){

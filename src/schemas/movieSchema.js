@@ -15,7 +15,12 @@ const MovieSchema = new Schema({
         require: true,
     },
     timing: {
-        type: [ [ [Number],[Number],[Number],[Number],[Number] ] ]
+        /* type: [ [ [Number],[Number],[Number],[Number],[Number] ] ]
+                        strt    end       day      month     year
+
+        */
+       type: {
+       }
     },
     // startTime: {
     //     type: String,
