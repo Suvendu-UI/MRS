@@ -9,20 +9,22 @@ const addMovieRouter = express.Router();
 
 addMovieRouter.post('/', async function(req, res, next){
 
-    console.log("addMovie.js 1")
+    
 
     const title = req.body.title;
-    const startTime = req.body.startTime;
-    const endTime = req.body.endTime;
-    const day = req.body.day;
-    const month = req.body.month;
-    const year = req.body.year;
-    const genre = req.body.genre;
-    const description = req.body.description;
-    const av = req.body.av;
-    const location = req.body.location;
+    const startTime = (req.body.startTime).trim();
+    const endTime = (req.body.endTime).trim();
+    const day = (req.body.day).trim();
+    const month = (req.body.month).trim();
+    const year = (req.body.year).trim();
+    const genre = (req.body.genre).trim();
+    const description = (req.body.description).trim();
+    const av = (req.body.av).trim();
+    const location = (req.body.location).trim();
 
-    console.log("addMovie.js 2")
+    
+
+    
 
     const cortitle = z.string().safeParse(title);
     const corstartTime = z.number().safeParse(startTime);
@@ -35,7 +37,7 @@ addMovieRouter.post('/', async function(req, res, next){
     const corav = z.string().safeParse(av);
     const corlocation = z.string().safeParse(location);
 
-    console.log("addMovie.js 3")
+    
 
     if(!(corday || corendTime || cormonth || cortitle || corstartTime || coryear || corgenre || cordescription || corav || corlocation)){
         return res.json({
@@ -43,41 +45,66 @@ addMovieRouter.post('/', async function(req, res, next){
         })
     }
 
-    console.log("addMovie.js 4")
+    
 
-    const found = await movie.find({
+    const foundMovie = await movie.find({
         title,
-        timing: {
-            $in: [startTime, endTime, year, month, day]
-        } ,
-        location,
+        description,
+        genre
     })
 
-    console.log("addMovie.js 5")
 
-    console.log(found);
+    
+    console.log(foundMovie)
+    
+    
+    console.log(typeof(foundMovie))
+    
 
-    console.log("kasjdfl;ajsdl;kfj");
 
-    if(!found.timing){
+    if(!foundMovie[0]){
+
+        console.log("addMovie.js 9")
+
+        const updated = await movie.create({
+            title,
+            description,
+            genre,
+            timing: [],
+            location
+        })
+
+        return res.json({
+            msg: "Movie created"
+        })
+    }
+
+    let found;
+
+    console.log(foundMovie[0].timing)
+
+    const queryArray = [startTime, endTime, year, month, day];
+
+
+    found = movie.findOne({
+        timing: {
+            $elemMatch: { $eq: queryArray }
+        }
+    })
+    
+    console.log(!found)
+
+    if(!found){
         const date = new Date();
         if((startTime >= 0 && startTime <= 2400) && (endTime >= 0 && endTime <= 2400) && (endTime >= startTime)){
-            if(year >= date.getFullYear()){
-                if(month >= date.getMonth() + 1){
-                    if(day >= date.getDate()){
-                                const created  = await movie.insertMany({
-                                    title,
-                                    description,
-                                    genre,
-                                    $addToSet: {
-                                        timing: [ startTime, endTime, year, month, day]
-                                    },
-                                    location
-                                })
-                                console.log("addMovie.js 88")
+        if(year >= date.getFullYear()){
+        if(month >= date.getMonth() + 1){
+        if(day >= date.getDate()){
+                                const created = await movie.updateOne({ _id: foundMovie[0]._id }, { $push: { timing : [startTime,endTime,year,month,day] } })
+                                
                                 if(created) {
                                     return res.json({
-                                        msg: "Movie created successfully"
+                                        msg: "Movie timings updated successfully"
                                     })
                                 }
                     }
@@ -86,30 +113,11 @@ addMovieRouter.post('/', async function(req, res, next){
         }
     }
     else{
-
-        console.log("addMovie.js 9")
-
-        const updated = await movie.updateOne(
-            {_id: found.},
-            {
-                
-                    $push: {
-                    time: [startTime, endTime, year, month, day]
-                    }
-            }
-        )
-
-
-
-        console.log("addMovie.js 9")
+        return res.json({
+            msg: "Already timing is present"
+        })
     }
-
-
-    console.log("addMovie.js 6")
-
-
-
-
+    
     return res.json({
         msg: "Movie already there"
     })
