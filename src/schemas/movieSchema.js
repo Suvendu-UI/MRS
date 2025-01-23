@@ -18,7 +18,7 @@ const MovieSchema = new Schema({
         type: [[Number]],
         validate: {
             validator: function (v) {
-                return Array.isArray(v) && v.every(arr => Array.isArray(arr) && arr.length === 5);
+                return Array.isArray(v) && v.every(arr => Array.isArray(arr) && arr.length <= 5);
             },
             message: "Each element in 'timing' must be an array of exactly 4 numbers."
         },
