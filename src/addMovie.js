@@ -6,8 +6,10 @@ import movie from "./schemas/movieSchema.js";
 const app = express();
 
 const addMovieRouter = express.Router();
+const removeMovieRouter = express.Router();
+const updateMovieRouter = express.Router();
 
-addMovieRouter.post('/', async function(req, res, next){
+addMovieRouter.post('/addMovie', async function(req, res, next){
 
 
     const objBody = req.body;
@@ -146,4 +148,134 @@ console.log(foundMovie);
 
 })
 
-export default addMovieRouter;
+removeMovieRouter.get('/removeMovie', async function(req, res){
+    const objBody = req.body;
+    
+
+    const title =       (objBody.title).trim();
+    const startTime =   (objBody.startTime).trim();
+    const endTime =     (objBody.endTime).trim();
+    const day =         (objBody.day).trim();
+    const month =       (objBody.month).trim();
+    const year =        (objBody.year).trim();
+    const genre =       (objBody.genre).trim();
+    const description = (objBody.description).trim();
+    const av =          (objBody.av).trim();
+    const location =    (objBody.location).trim();
+
+    
+
+    
+
+    const cortitle =        z.string().safeParse(title);
+    const corstartTime =    z.number().safeParse(startTime);
+    const corendTime =      z.number().safeParse(endTime);
+    const corday =          z.number().safeParse(day);
+    const cormonth =        z.number().safeParse(month);
+    const coryear =         z.number().safeParse(year);
+    const corgenre =        z.string().safeParse(genre);
+    const cordescription =  z.string().safeParse(description);
+    const corav =           z.string().safeParse(av);
+    const corlocation =     z.string().safeParse(location);
+
+    
+
+    if(!(corday || corendTime || cormonth || cortitle || corstartTime || coryear || corgenre || cordescription || corav || corlocation)){
+        return res.json({
+            msg: "Incorrect choices filled/written"
+        })
+    }
+
+    try {
+        let foundMovie = await movie.findOneAndDelete({
+            title,
+            description,
+            genre,
+            location,
+        })        
+
+        return res.json({
+            msg: "removed the movie"
+        })
+    } catch (error) {
+        console.log("Error is in removeMovie", error)
+    }
+
+    console.log(foundMovie);
+
+    return res.json({
+        msg: "couldn't removed the movie"
+    })
+
+
+})
+
+
+updateMovieRouter.post('/updateMovie', async function(req, res, next){
+    const objBody = req.body;
+    
+
+    const title =       (objBody.title).trim();
+    const startTime =   (objBody.startTime).trim();
+    const endTime =     (objBody.endTime).trim();
+    const day =         (objBody.day).trim();
+    const month =       (objBody.month).trim();
+    const year =        (objBody.year).trim();
+    const genre =       (objBody.genre).trim();
+    const description = (objBody.description).trim();
+    const av =          (objBody.av).trim();
+    const location =    (objBody.location).trim();
+
+    
+
+    
+
+    const cortitle =        z.string().safeParse(title);
+    const corstartTime =    z.number().safeParse(startTime);
+    const corendTime =      z.number().safeParse(endTime);
+    const corday =          z.number().safeParse(day);
+    const cormonth =        z.number().safeParse(month);
+    const coryear =         z.number().safeParse(year);
+    const corgenre =        z.string().safeParse(genre);
+    const cordescription =  z.string().safeParse(description);
+    const corav =           z.string().safeParse(av);
+    const corlocation =     z.string().safeParse(location);
+
+    
+
+    if(!(corday || corendTime || cormonth || cortitle || corstartTime || coryear || corgenre || cordescription || corav || corlocation)){
+        return res.json({
+            msg: "Incorrect choices filled/written"
+        })
+    }
+
+    try {
+        const done = await movie.findOneAndUpdate(
+            {
+                title,
+                genre,
+                description
+            },
+            {
+                title : "Titanic Part 2"
+            }
+        )    
+        
+        return res.json({
+            msg: "Done changes"
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
+    return res.json({
+        msg: "couldn't done changes"
+    })
+    
+}) 
+
+
+
+
+
+export  { addMovieRouter, removeMovieRouter, updateMovieRouter };

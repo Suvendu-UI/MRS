@@ -3,7 +3,7 @@ import user from "./schemas/userSchema.js";
 import z from 'zod';
 
 import searchRouter from "./search.js";
-import addMovieRouter from "./addMovie.js";
+import {addMovieRouter, removeMovieRouter, updateMovieRouter } from "./addMovie.js";
 import reserveRouter from "./reserve.js";
 
 const app = e();
@@ -61,5 +61,7 @@ loginRouter.use('/search', searchRouter)
 loginRouter.use('/addMovie', addMovieRouter);
 loginRouter.use('/searchMovie', searchRouter);
 loginRouter.use('/reserve', reserveRouter);
+loginRouter.use('/removeMovie', removeMovieRouter);
+loginRouter.use('/updateMovie', updateMovieRouter);
 
 export default loginRouter;
