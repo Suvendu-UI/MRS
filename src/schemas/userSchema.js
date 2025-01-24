@@ -18,18 +18,24 @@ const UserSchema = new Schema({
         type: String,
         require: true
     },
-    day: {
-        type: Number,
-        require: true
+    movieReservedByUser: {
+        type: [
+                new Schema({
+                movieDetails: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'movie'
+                },
+                costOfTickets: {
+                    type: Number,
+                    require: true
+                }
+            })
+        ]
     },
-    month: {
+    choose: {
         type: Number,
-        require: true
-    },
-    year: {
-        type: Number,
-        require: true
-    },
+        require: false
+    }
 })
 
 const user = mongoose.model('user', UserSchema);
