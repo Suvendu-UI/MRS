@@ -2,7 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import rootRouter from "./routes/index.js";
 
-
 const app = express();
 
 app.use(express.json());

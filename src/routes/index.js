@@ -1,8 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 
-import userRouter from "../user.js";
-import adminRouter from "../admin.js";
+import userRouter from "../user/user.js";
+import adminRouter from "../admin/admin.js";
 
 const rootRouter = express.Router();
 
